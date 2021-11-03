@@ -46,6 +46,7 @@
           name = "tobii-engine";
           version = "0.1.6.193_rc";
           src = self;
+          buildInputs = [ pkgs.util-linux ];
           buildPhase = ''
             ${pkgs.dpkg}/bin/dpkg-deb -x \
               ./tobii_engine_linux-0.1.6.193_rc-Linux.deb tobii-engine
@@ -93,7 +94,7 @@
               cat > $out/bin/tobii_engine << EOF
               #!/bin/sh
               set -uex
-              ${pkgs.util-linux}/bin/unshare -m $out/bin/tobii_engine-unshared
+              unshare -m $out/bin/tobii_engine-unshared
               EOF
               cat > $out/bin/tobii_engine-unshared << EOF
               #!/bin/sh
