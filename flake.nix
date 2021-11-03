@@ -46,7 +46,6 @@
           name = "tobii-engine";
           version = "0.1.6.193_rc";
           src = self;
-          buildInputs = [ pkgs.util-linux ];
           buildPhase = ''
             ${pkgs.dpkg}/bin/dpkg-deb -x \
               ./tobii_engine_linux-0.1.6.193_rc-Linux.deb tobii-engine
@@ -94,17 +93,17 @@
               cat > $out/bin/tobii_engine << EOF
               #!/bin/sh
               set -uex
-              unshare -m $out/bin/tobii_engine-unshared
+              ${pkgs.util-linux}/bin/unshare -m $out/bin/tobii_engine-unshared
               EOF
               cat > $out/bin/tobii_engine-unshared << EOF
               #!/bin/sh
               set -uex
               [ -e $statedir ] || \
                 ${pkgs.rsync}/bin/rsync -av $out/usr_dumpster_template/* $statedir/
-              mount --bind $statedir /usr
-              mount --bind $out/lib /usr/share/tobii_engine/lib
+              ${pkgs.util-linux}/bin/mount --bind $statedir /usr
+              ${pkgs.util-linux}/bin/mount --bind $out/lib /usr/share/tobii_engine/lib
               touch /usr/share/tobii_engine/tobii_engine-unwrapped
-              mount --bind $out/bin/tobii_engine-unwrapped /usr/share/tobii_engine/tobii_engine-unwrapped
+              ${pkgs.util-linux}/bin/mount --bind $out/bin/tobii_engine-unwrapped /usr/share/tobii_engine/tobii_engine-unwrapped
               exec /usr/share/tobii_engine/tobii_engine-unwrapped
               EOF
               chmod +x $out/bin/tobii_engine{,-unshared}
