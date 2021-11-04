@@ -7,7 +7,10 @@
 
 void gaze_point_callback(tobii_gaze_point_t const *gaze_point, void *user_data) {
     if (gaze_point->validity == TOBII_VALIDITY_VALID)
-        printf("Gaze point: %f, %f\n",
+        //string command = "echo"
+        //string s = "/bin/" + command;
+        //execlp(s.c_str(), command.c_str(), NULL);
+        printf("%f %f\n",
                gaze_point->position_xy[0],
                gaze_point->position_xy[1]);
 }
@@ -37,7 +40,7 @@ int main() {
     assert(error == TOBII_ERROR_NO_ERROR);
 
     int is_running = 1000; // in this sample, exit after some iterations
-    while (--is_running > 0) {
+    while (is_running > 0) {
         error = tobii_wait_for_callbacks(1, &device);
         assert(error == TOBII_ERROR_NO_ERROR || error == TOBII_ERROR_TIMED_OUT);
 
